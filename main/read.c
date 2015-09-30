@@ -90,6 +90,14 @@ static void setSourceFileParameters (vString *const fileName, const langType lan
 	if (File.source.name != NULL)
 		vStringDelete (File.source.name);
 	File.source.name = fileName;
+	//-- generating short filename (for anonymous structures). Its length must not be more than FILENAME_MAX_LENGTH
+	if (fileName->length <=  FILENAME_MAX_LENGTH){
+		File.source.shortName = fileName;
+	} else {
+		File.source.shortName = vStringNew();
+		vStringResize(File.source.shortName, FILENAME_MAX_LENGTH);
+		memcpy (File.source.shortName->buffer, &File.source.name->buffer[ File.source.name->length - FILENAME_MAX_LENGTH + 1/*this is null-symbol at end of line*/], FILENAME_MAX_LENGTH);
+	}
 
 	if (File.source.tagPath != NULL)
 		eFree (File.source.tagPath);

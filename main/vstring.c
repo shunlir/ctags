@@ -29,7 +29,7 @@ static const size_t vStringInitialSize = 32;
 *   FUNCTION DEFINITIONS
 */
 
-static void vStringResize (vString *const string, const size_t newSize)
+extern void vStringResize (vString *const string, const size_t newSize)
 {
 	char *const newBuffer = xRealloc (string->buffer, newSize, char);
 

@@ -9,6 +9,8 @@
 #ifndef _READ_H
 #define _READ_H
 
+#define FILENAME_MAX_LENGTH 40
+
 #if defined(FILE_WRITE)
 # define CONST_FILE
 #else
@@ -32,6 +34,7 @@
 *   MACROS
 */
 #define getInputLineNumber()     File.lineNumber
+#define getInputFileShortName()  vStringValue (File.source.shortName)
 #define getInputFileName()       vStringValue (File.name)
 #define getInputFilePosition()   File.filePosition
 #define getSourceFileName()      vStringValue (File.source.name)
@@ -88,6 +91,7 @@ typedef struct sInputFile {
 	 */
 	struct sSource {
 		vString *name;           /* name to report for source file */
+		vString *shortName;      /* name that will not be longer that FILENAME_MAX_LENGTH */
 		char    *tagPath;        /* path of source file relative to tag file */
 		unsigned long lineNumber;/* line number in the source file */
 		boolean  isHeader;       /* is source file a header file? */

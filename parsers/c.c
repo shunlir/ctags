@@ -290,7 +290,7 @@ static vString *Signature;
 static boolean CollectingSignature;
 
 /* Number used to uniquely identify anonymous structs and unions. */
-static int AnonymousID = 0;
+//static int AnonymousID = 0;
 
 #define COMMONK_UNDEFINED -1
 
@@ -3098,8 +3098,27 @@ static void tagCheck (statementInfo *const st)
 					/*  For an anonymous struct or union we use a unique ID
 					 *  a number, so that the members can be found.
 					 */
-					char buf [20];  /* length of "_anon" + digits  + null */
-					sprintf (buf, "__anon%d", ++AnonymousID);
+					//char buf [20];  /* length of "_anon" + digits  + null */
+					//sprintf (buf, "__anon%d", ++AnonymousID);
+					/* PATHED: added filename to anon structs name */
+#define STRUCT_NAME_LENGTH 60
+					char buf [STRUCT_NAME_LENGTH];  /* length of "_anon" + digits  + null */
+					int i;
+					char * pCurChar = buf;
+					sprintf (buf, "__anon_%s_%lu", getInputFileShortName (), getSourceLineNumber ());
+					for (i = 0; i < STRUCT_NAME_LENGTH; i++, pCurChar++){
+						if (
+								*pCurChar == '.' 
+								|| *pCurChar == ':' 
+								|| *pCurChar == '\\' 
+								|| *pCurChar == '/' 
+								|| *pCurChar == ' ' 
+							){
+							*pCurChar = '_';
+						} else if (*pCurChar == 0){
+							break;
+						}
+					}
 					vStringCopyS (st->blockName->name, buf);
 					st->blockName->type = TOKEN_NAME;
 					st->blockName->keyword = KEYWORD_NONE;
